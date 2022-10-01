@@ -18,7 +18,7 @@ if not levelcode.find_one(): # if we have no level code stored
 
 def to_v3(v1_code):
 	cellmachine = CellMachine()
-    cellmachine.parse_code(v1_code)
+	cellmachine.parse_code(v1_code)
 	return cellmachine.save_v3()
 
 def broadcast(message):
