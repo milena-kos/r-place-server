@@ -4,7 +4,7 @@ mongoclient = pymongo.MongoClient(os.environ["MONGO_URL"])
 db = mongoclient["rplace"]
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(('', os.environ["PORT"]))
+server.bind(('', int(os.environ["PORT"])))
 
 server.listen()
 
