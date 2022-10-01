@@ -1,4 +1,4 @@
-import pymongo, os, socket, threading, time, cell_machine_levels
+import pymongo, os, socket, threading, time, Python_Machine
 
 mongoclient = pymongo.MongoClient(os.environ["MONGO_URL"])
 db = mongoclient["rplace"]
@@ -17,8 +17,9 @@ if not levelcode.find_one(): # if we have no level code stored
 	levelcode.insert_one({"code": "V1;75;75;;;;"})
 
 def to_v3(v1_code):
-	convert = cell_machine_levels.level.open(v1_code)
-	return convert.save("V3")
+	cellmachine = CellMachine()
+    cellmachine.parse_code(v1_code)
+	return cellmachine.save_v3()
 
 def broadcast(message):
 	for client in clients: 
