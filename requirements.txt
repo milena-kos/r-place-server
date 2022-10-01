@@ -1,5 +1,3 @@
 pymongo
 dnspython
-socket
-threading
 cell_machine_levels
