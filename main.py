@@ -1,4 +1,5 @@
-import pymongo, os, socket, threading, time, Python_Machine
+import pymongo, os, socket, threading, time
+from Python_Machine import CellMachine
 
 mongoclient = pymongo.MongoClient(os.environ["MONGO_URL"])
 db = mongoclient["rplace"]
@@ -17,7 +18,7 @@ if not levelcode.find_one(): # if we have no level code stored
 	levelcode.insert_one({"code": "V1;75;75;;;;"})
 
 def to_v3(v1_code):
-	cellmachine = Python_Machine.CellMachine()
+	cellmachine = CellMachine()
 	cellmachine.parse_code(v1_code)
 	return cellmachine.save_v3()
 
