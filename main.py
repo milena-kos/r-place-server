@@ -6,7 +6,7 @@ mongoclient = pymongo.MongoClient(os.environ["MONGO_URL"])
 db = mongoclient["rplace"]
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(('', int(os.environ["PORT"])))
+server.bind(('', 8080))
 
 server.listen()
 
@@ -16,7 +16,7 @@ levelcode = db["levelcode"]
 cooldowns = db["cooldowns"]
 
 if not levelcode.find_one(): # if we have no level code stored
-	levelcode.insert_one({"code": "V1;75;75;;;;"})
+	levelcode.insert_one({"code": "V1;75;75;;0.0.0.0;;"})
 
 def to_v3(v1_code):
 	cellmachine = CellMachine()
@@ -33,7 +33,7 @@ def handle(client, address):
 		try:
 			message = client.recv(256).decode("utf-8") # receive up to 256 bytes from client.
 			# ensure cooldown isnt bypassed
-			if time.time() - cooldowns.find_one({"ip": address[0]})["time"] >= 60:
+			if time.time() - cooldowns.find_one({"ip": address[0]})["time"] >= 60 and len(message.split(".")) == 4:
 				cooldowns.replace_one({"ip": address[0]}, {"ip": address[0], "time": time.time()})
 				
 				current = levelcode.find_one()["code"]
