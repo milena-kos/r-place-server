@@ -20,13 +20,13 @@ if not levelcode.find_one(): # if we have no level code stored
 
 def to_v3(v1_code):
     print("converting " + v1_code)
-	cellmachine = CellMachine()
-	cellmachine.parse_code(v1_code)
-	return cellmachine.save_v3()
+    cellmachine = CellMachine()
+    cellmachine.parse_code(v1_code)
+    return cellmachine.save_v3()
 
 def broadcast(message):
-	for client in clients: 
-		client.send(message)
+    for client in clients: 
+        client.send(message)
 
 def handle(client, address):
 	client.send(to_v3(levelcode.find_one()["code"]).encode("utf-8"))
@@ -59,10 +59,10 @@ def handle(client, address):
 			break
 
 def receive():
-	while True:
+    while True:
 		# accept anyone
 		client, address = server.accept()
-		print(f"Connected with {address}, {str(client)}!")
+        print(f"Connected with {address}, {str(client)}!")
 		
 		if not cooldowns.find_one({"ip": address[0]}):
 			cooldowns.insert_one({"ip": address[0], "time": 0})
