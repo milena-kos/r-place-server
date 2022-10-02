@@ -33,8 +33,8 @@ def handle(client, address):
 		try:
 			message = client.recv(256).decode("utf-8") # receive up to 256 bytes from client.
 			# ensure cooldown isnt bypassed
-			if time.time() - cooldowns.find_one({"ip": address})["time"] >= 60:
-				cooldowns.replace_one({"ip": address}, {"ip": address, "time": time.time()})
+			if time.time() - cooldowns.find_one({"ip": address[0]})["time"] >= 60:
+				cooldowns.replace_one({"ip": address[0]}, {"ip": address[0], "time": time.time()})
 				
 				current = levelcode.find_one()["code"]
 				cells = current.split(";")[4].split(",")
@@ -63,8 +63,8 @@ def receive():
 		client, address = server.accept()
 		print(f"Connected with {address}, {str(client)}!")
 		
-		if not cooldowns.find_one({"ip": address}):
-			cooldowns.insert_one({"ip": address, "time": 0})
+		if not cooldowns.find_one({"ip": address[0]}):
+			cooldowns.insert_one({"ip": address[0], "time": 0})
 
 		clients.append(client)
 
