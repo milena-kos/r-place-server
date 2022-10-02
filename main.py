@@ -69,6 +69,7 @@ def receive():
 
 		clients.append(client)
 
+        print("stargint a threat")
 		thread = threading.Thread(target=handle, args=(client, address,))
 		thread.start()
 
