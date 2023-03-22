@@ -1,4 +1,3 @@
-# amongus
 import socket, threading, time, catbase
 
 db = catbase.CatDB("db.json", none=0)
