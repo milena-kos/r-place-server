@@ -1,9 +1,10 @@
+# amongus
 import socket, threading, time, catbase
 
 db = catbase.CatDB("db.json", none=0)
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(('', 8080))
+server.bind(('', 30128))
 
 server.listen()
 
@@ -30,7 +31,6 @@ def handle(client, address):
             message = client.recv(256).decode("ascii") # receive up to 256 bytes from client.
             if message == "heartbeat":
                 if responses[address[0]] != []:
-                    print(responses[address[0]][0])
                     client.send(responses[address[0]][0])
                     responses[address[0]].pop(0)
                 else:
@@ -63,24 +63,26 @@ def handle(client, address):
                 db.commit()
                 client.send(message.encode("ascii"))
                 broadcast(message, address[0])
-            else:
+            elif message:
                 client.send("heartbeat".encode("ascii"))
-        except ConnectionResetError:
-            print(f"Disconnected with {str(client)}!")
+            else:
+                raise Exception # message is empty, only possible if client is down
+        except Exception as e:
+            print(f"Disconnected with {str(address[0])} - {e}!")
             clients.remove(client)
+            responses[address[0]] = []
             client.close()
-            break
+            return
 
 def receive():
     while True:
         # accept anyone
         client, address = server.accept()
-        print(f"Connected with {address}, {str(client)}!")
+        print(f"Connected with {address}!")
 
         clients.append(client)
         responses[address[0]] = []
 
-        print("stargint a threat")
         thread = threading.Thread(target=handle, args=(client, address,))
         thread.start()
 
