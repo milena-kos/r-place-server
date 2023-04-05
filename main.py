@@ -166,7 +166,7 @@ def receive():
     while True:
         # accept anyone
         client, address = server.accept()
-        if adderss[0] in ips:
+        if address[0] in ips:
             client.close()
             continue
 
